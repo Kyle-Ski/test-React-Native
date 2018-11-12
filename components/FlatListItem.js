@@ -6,6 +6,7 @@ const FlatListItem = ({index, item}) => {
         <View key={index} style={{flex: 1, backgroundColor: index % 2 === 0 ? 'mediumseagreen' : 'tomatoe'}}>
             <Text style={styles.flatListItem}>{item.name}</Text>
             <Text >{item.description}</Text>
+            
         </View>
     )
 }
