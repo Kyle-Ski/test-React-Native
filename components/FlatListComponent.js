@@ -1,24 +1,35 @@
 import React, { Component } from 'react';
-import { View, FlatList, TextInput,Text, Keyboard } from 'react-native';
+import { 
+    View, 
+    FlatList, 
+    TextInput,
+    Text, 
+    Keyboard, 
+    Alert,
+    Image,
+    Dimensions,
+    ScrollView
+} from 'react-native';
 import FlatListItem from './FlatListItem'
 import data from '../projects.json'
-
+import Button from 'react-native-button'
 class FlatListComponent extends Component {
 
     state = {
         input: '',
-        pass: ''
+        pass: '',
+        keyboardShown: ''
     }
 
     componentWillMount () {
         this.KeyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
             this.setState( () => {
-                return { input: 'Keyboard is shown'}
+                return { keyboardShown: 'Keyboard is shown'}
             })
         })
         this.KeyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
             this.setState( () => {
-                return { input: 'Keyboard hidden'}
+                return { keyboardShown: 'Keyboard hidden'}
             })
         })
     }
@@ -26,13 +37,19 @@ class FlatListComponent extends Component {
         this.KeyboardDidShowListener.remove()
         this.KeyboardDidHideListener.remove()
     }
+    
+    _onPressButton = () => {
+        Alert.alert(`Your password is ${this.state.pass}`)
+    }
+
     render () {
     return (
-        <View style={{flex: 1, marginTop: 22}}>
-        <Text>Username:</Text>
+        <View style={{flex: 1, marginTop: 22, justifyContent: 'center', alignItems: 'center'}}>
+        <Text style={{alignSelf: 'flex-start'}}>Username:</Text>
         <TextInput 
             style={ {
                 height: 40,
+                width: 400,
                 borderColor: 'grey',
                 margin: 20,
                 borderWidth: 1
@@ -41,15 +58,32 @@ class FlatListComponent extends Component {
                 this.setState((old) => {
                     return {input: text}}) 
             }}
-            autoFocus={true}
+            autoFocus={false}
             placeholder='Enter your Username'
             returnKeyType='next'
             onSubmitEditing={Keyboard.dismiss}
         />
-        <Text>Password:</Text>
+        <Text style={{alignSelf: 'flex-start'}}>Password:</Text>
+        <View style={{borderRadius: 20, backgroundColor: 'green'}}>
+        {/* <Button 
+            style={
+                {
+                    backgroundColor: 'green'
+                }
+            }
+            title='Submit' 
+            onPress ={
+                () => {
+                    return Alert.alert(`Your Password is: ${this.state.pass}`)
+                }
+            }
+        >
+        </Button> */}
+        </View>
         <TextInput 
             style={ {
                 height: 40,
+                width: 400,
                 borderColor: 'grey',
                 margin: 20,
                 borderWidth: 1
@@ -61,9 +95,23 @@ class FlatListComponent extends Component {
             placeholder='Enter your Password'
             secureTextEntry={true}
         />
+        <Button 
+            style={
+            {
+                fontSize: 20, 
+                color: 'white', 
+                backgroundColor: 'green',
+                borderRadius: 15,
+                padding: 10
+                }
+            }
+            onPress={this._onPressButton}
+        >
+            Submit
+        </Button>
         <Text style={{marginLeft: 20}}>{this.state.input}</Text>
+        <Text style={{marginLeft: 20}}>{this.state.keyboardShown}</Text>
         <FlatList data={data} renderItem={({item, index})=>{
-            console.log(`Item = ${JSON.stringify(item.name)} at index: ${JSON.stringify(index)}`)
             return (
             <FlatListItem key={index} item={item} index={index} />
 
@@ -71,7 +119,7 @@ class FlatListComponent extends Component {
         }} keyExtractor={(item, index) => index.toString()}>
 
         </FlatList>
-
+        <Image source={{uri: 'https://i.imgur.com/VySjxa2.jpg'}}></Image>
         </View>
     );
 }
